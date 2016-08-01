@@ -1,0 +1,18 @@
+[
+	{
+		"id":"1",
+		"coa_id": "500",
+		"name": "Cash",
+		"type": "Asset",
+		"dc": "debit"
+		"balance": "10000.00"
+	},
+	{
+		"id":"2",
+		"coa_id": "520",
+		"name": "Accounts Receivable",
+		"type": "Asset",
+		"dc": "debit"
+		"balance": "200.00"
+	},
+]

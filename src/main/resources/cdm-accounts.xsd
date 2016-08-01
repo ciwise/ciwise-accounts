@@ -1,0 +1,38 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ciwise-master-accounts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ciwise-account" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:byte" name="id"/>
+              <xs:element type="xs:string" name="name"/>
+              <xs:element type="xs:byte" name="coa_id"/>
+              <xs:element type="xs:string" name="type"/>
+              <xs:element type="xs:string" name="dc"/>
+              <xs:element name="account-entries">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="account-entry" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:byte" name="id"/>
+                          <xs:element type="xs:short" name="coa-id"/>
+                          <xs:element type="xs:string" name="descr"/>
+                          <xs:element type="xs:string" name="trans-date"/>
+                          <xs:element type="xs:float" name="debit"/>
+                          <xs:element type="xs:string" name="credit"/>
+                          <xs:element type="xs:byte" name="rec"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,91 @@
+#%RAML 0.8
+title: ciwise-accounts
+baseUri: http://localhost:8081/api/v1/
+version: v1
+     
+# this api will need authentication and authorization later    
+/accounts:
+  get:
+    description: Retrieve a JSON array of charted accounts for CI Wise Inc.
+    queryParameters:
+      acctType:
+        displayName: Account Type
+        type: string
+        description: The account type and one of asset, expense, liability, or equity
+        example: Asset
+        required: false      
+      dcType:
+        displayName: Debit or Credit Type
+        type: string
+        description: The debit or credit type of the account (e.g. Cash account increase shows in debit column)
+        example: debit
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+  put:
+  post:
+  delete:
+     
+  /{chartId}:
+    get:
+      description: Retrieve a JSON object of charted account using its chart id
+      responses:
+        200:
+          body:
+             application/json:
+#               example: !include examples/v1-order.json
+          
+    /entries:
+      get:
+        description: Retrieve a JSON array of account entries for the specified charted account
+        responses:
+          200:
+            body:
+              application/json:
+#                example: !include examples/v1-orderItems.json
+
+/entries:
+  get:
+    queryParameters:
+      coaId:
+        displayName: Order Id
+        type: number
+        description: Order Primary Key
+        example: 14673
+        required: false
+      itemId:
+        displayName: Item Id
+        type: number
+        description: Item Primary Key
+        example: 37422
+        required: false
+    description: Retrieve a JSON array of order items
+    responses:
+      200:
+        body:
+          application/json:
+#            example: !include examples/v1-orderItems.json
+  put:
+  post:
+  delete:
+      
+  /{entryId}:
+    get:
+      description: Retrieve a JSON object of account entry using its primary key or id
+      responses:
+        200:
+          body:
+            application/json:
+ #             example: !include examples/v1-orderItem.json 
+
+  /coa/{coaId}:
+    get:
+      description: Retrieve a JSON array of account entries using the charted account id
+      responses:
+        200:
+          body:
+            application/json:
+ #             example: !include examples/v1-orderItem.json 
+         

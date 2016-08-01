@@ -1,0 +1,22 @@
+[
+	{
+		"id":"1",
+		"acct_id": "1",
+		"coa_id": "500",
+		"desc": "Cash deposit-Capital",
+		"trans_date": "07/31/2016",
+		"debit": "100.00",
+		"credit": "",
+		"rec": 0
+	},
+	{
+		"id":"2",
+		"acct_id": "1",
+		"coa_id": "500",
+		"desc": "Receivable-Hoegg Software",
+		"trans_date": "08/02/2016",
+		"debit": "800.00",
+		"credit": "",
+		"rec": 0
+	}
+]

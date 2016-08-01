@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ciwise-master-accounts>
+	<ciwise-account>
+	    <id>1</id>
+	 	<name>Cash</name>
+	 	<coa_id>100</coa_id>
+	 	<type>Asset</type>
+	 	<dc>debit</dc>
+		<account-entries>
+			<account-entry>
+				<id>1</id>
+				<coa-id>500</coa-id>
+				<descr>Deposit cash from Hoegg Software</descr>
+				<trans-date>07/31/2016</trans-date>
+				<debit>800.00</debit>
+				<credit></credit>
+				<rec>0</rec>
+			</account-entry>
+			<account-entry>
+				<id>2</id>
+				<coa-id>500</coa-id>
+				<descr>Deposit capital</descr>
+				<trans-date>08/02/2016</trans-date>
+				<debit>4000.00</debit>
+				<credit></credit>
+				<rec>0</rec>
+			</account-entry>
+		</account-entries>
+	</ciwise-account>
+	<ciwise-account>
+	    <id>2</id>
+	 	<name>Beer</name>
+	 	<coa_id>120</coa_id>
+	 	<type>Asset</type>
+	 	<dc>debit</dc>
+		<account-entries>
+			<account-entry>
+				<id>1</id>
+				<coa-id>500</coa-id>
+				<descr>Deposit cash from Hoegg Software</descr>
+				<trans-date>07/31/2016</trans-date>
+				<debit>800.00</debit>
+				<credit></credit>
+				<rec>0</rec>
+			</account-entry>
+			<account-entry>
+				<id>2</id>
+				<coa-id>500</coa-id>
+				<descr>Deposit capital</descr>
+				<trans-date>08/02/2016</trans-date>
+				<debit>4000.00</debit>
+				<credit></credit>
+				<rec>0</rec>
+			</account-entry>
+		</account-entries>
+	</ciwise-account>
+</ciwise-master-accounts>

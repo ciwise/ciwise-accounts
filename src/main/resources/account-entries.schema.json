@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "acct_id": {
+        "type": "string"
+      },
+      "coa_id": {
+        "type": "string"
+      },
+      "desc": {
+        "type": "string"
+      },
+      "trans_date": {
+        "type": "string"
+      },
+      "debit": {
+        "type": "string"
+      },
+      "credit": {
+        "type": "string"
+      },
+      "rec": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "id",
+      "acct_id",
+      "coa_id",
+      "desc",
+      "trans_date",
+      "debit",
+      "credit",
+      "rec"
+    ]
+  }
+}

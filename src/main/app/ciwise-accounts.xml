@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+
+    
+    <apikit:config name="ciwise-accounts-config" raml="ciwise-accounts.raml" consoleEnabled="false" doc:name="Router"/>
+    <db:mysql-config name="MySQL_Configuration" host="localhost" port="3306" user="root" password="${db.password}" database="ciwise-accounts" doc:name="MySQL Configuration"/>
+    <flow name="ciwise-accounts-main">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/*" doc:name="HTTP"/>
+        <apikit:router config-ref="ciwise-accounts-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="ciwise-accounts-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="ciwise-accounts-console">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/console/*" doc:name="HTTP"/>
+        <apikit:console config-ref="ciwise-accounts-config" doc:name="APIkit Console"/>
+    </flow>
+    <flow name="put:/entries:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="put:/accounts:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="delete:/entries:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="delete:/accounts:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/entries:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/accounts:ciwise-accounts-config">
+        <choice doc:name="Choice">
+ 			<when expression="#[message.inboundProperties.'http.query.params'.acctType == empty]">
+        <db:select config-ref="MySQL_Configuration" doc:name="Database">
+                    <db:parameterized-query><![CDATA[select * from accounts;]]></db:parameterized-query>
+
+        </db:select>
+
+        <dw:transform-message metadata:id="76b3a203-9a16-477d-a682-7e05525eb5d6" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+payload map ((payload01 , indexOfPayload01) -> {
+	coa_id: payload01.coa_id,
+	dc: payload01.dc,
+	id: payload01.id as :string,
+	name: payload01.name,
+	type: payload01.type,
+	balance: payload01.balance
+})
+]]></dw:set-payload>
+        </dw:transform-message>
+        <set-payload value="#[message.payload]" doc:name="Set Payload" mimeType="application/json"/>
+ 			
+            </when>
+            <otherwise>
+                <db:select config-ref="MySQL_Configuration" doc:name="Database">
+                    <db:parameterized-query><![CDATA[select * from accounts where type = #[message.inboundProperties.'http.query.params'.acctType];]]></db:parameterized-query>
+                </db:select>
+                <dw:transform-message metadata:id="76b3a203-9a16-477d-a682-7e05525eb5d6" doc:name="Transform Message">
+                    <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+payload map ((payload01 , indexOfPayload01) -> {
+	coa_id: payload01.coa_id,
+	dc: payload01.dc,
+	id: payload01.id as :string,
+	name: payload01.name,
+	type: payload01.type,
+	balance: payload01.balance
+})
+]]></dw:set-payload>
+                </dw:transform-message>
+                <set-payload value="#[message.payload]" mimeType="application/json" doc:name="Set Payload"/>
+            </otherwise>       
+        </choice>
+
+    </flow>
+    <flow name="get:/entries/coa/{coaId}:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/accounts/{chartId}:ciwise-accounts-config">
+        <db:select config-ref="MySQL_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[select * from accounts where coa_id = #[message.inboundProperties.'http.uri.params'.chartId]]]></db:parameterized-query>
+        </db:select>
+        <dw:transform-message metadata:id="4986eb3e-2179-4fb8-a296-853dbe61aac1" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+payload map ((payload01 , indexOfPayload01) -> {
+	balance: payload01.balance,
+	coa_id: payload01.coa_id,
+	dc: payload01.dc,
+	id: payload01.id as :string,
+	name: payload01.name,
+	type: payload01.type
+})]]></dw:set-payload>
+        </dw:transform-message>
+
+        <set-payload value="#[message.payload]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/accounts/{chartId}/entries:ciwise-accounts-config">
+        <db:select config-ref="MySQL_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[select * from account_entries where coa_id = #[message.inboundProperties.'http.uri.params'.chartId]]]></db:parameterized-query>
+        </db:select>
+        <dw:transform-message metadata:id="158d25b8-e11b-44ce-be77-b4a51d9d5ddd" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+payload map ((payload01 , indexOfPayload01) -> {
+	acct_id: payload01.acct_id as :string,
+	coa_id: payload01.coa_id,
+	credit: payload01.credit,
+	debit: payload01.debit,
+	desc: payload01.descr,
+	id: payload01.id as :string,
+	rec: payload01.rec as :boolean,
+	trans_date: payload01.trans_date
+})]]></dw:set-payload>
+        </dw:transform-message>
+        <set-payload value="#[message.payload]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/entries/{entryId}:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="post:/accounts:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="post:/entries:ciwise-accounts-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <apikit:mapping-exception-strategy name="ciwise-accounts-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+</mule>
